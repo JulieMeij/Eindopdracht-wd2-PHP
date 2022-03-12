@@ -13,8 +13,8 @@ $router = new \Bramus\Router\Router();
 
 $router->setNamespace('Controllers');
 
-// // routes for the products endpoint 
-// $router->get('/products', 'ProductController@getAll');
+// routes for the cards endpoint 
+$router->get('/cards', 'CardController@getAll');
 // $router->get('/products/(\d+)', 'ProductController@getOne');
 // $router->post('/products', 'ProductController@create');
 // $router->put('/products/(\d+)', 'ProductController@update');
