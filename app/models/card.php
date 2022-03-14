@@ -5,11 +5,11 @@ namespace Models;
 class Card implements \JsonSerializable {
     
     private int $id;
-    private int $number;
-    private string $name;
-    private string $colour;
-    private string $type;
-    private int $price;
+    public int $number;
+    public string $name;
+    public string $colour;
+    public string $type;
+    public int $price;
 
     public function jsonSerialize(): mixed {
         return get_object_vars($this);

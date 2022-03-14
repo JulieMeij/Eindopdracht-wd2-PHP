@@ -3,7 +3,6 @@ namespace Repositories;
 
 use PDO;
 use PDOException;
-use Models\Card;
 use Repositories\Repository;
 
 class CardRepository extends Repository
@@ -14,12 +13,27 @@ class CardRepository extends Repository
             $stmt = $this->connection->prepare("SELECT * FROM cards ORDER BY id DESC");
             $stmt->execute();
 
-            require __DIR__ . '/../models/card.php';
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Card');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\Card');
 
             $cards = $stmt->fetchAll();
 
             return $cards;
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+    function getOne($id){
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM cards WHERE id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\Card');
+
+            $card = $stmt->fetch();
+
+            return $card;
         } catch (PDOException $e) {
             return $e;
         }

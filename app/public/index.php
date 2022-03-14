@@ -15,8 +15,8 @@ $router->setNamespace('Controllers');
 
 // routes for the cards endpoint 
 $router->get('/cards', 'CardController@getAll');
-// $router->get('/products/(\d+)', 'ProductController@getOne');
-// $router->post('/products', 'ProductController@create');
+$router->get('/cards/(\d+)', 'CardController@getOne');
+$router->post('/cards', 'CardController@add');
 // $router->put('/products/(\d+)', 'ProductController@update');
 // $router->delete('/products/(\d+)', 'ProductController@delete');
 

@@ -22,31 +22,31 @@ class CardController extends Controller
         $this->respond($cards);
     }
 
-    //     public function getOne($id)
-    //     {
-    //         $category = $this->service->getOne($id);
+    public function getOne($id)
+    {
+        $card = $this->service->getOne($id);
 
-    //         // we might need some kind of error checking that returns a 404 if the product is not found in the DB
-    //         if (!$category) {
-    //             $this->respondWithError(404, "Category not found");
-    //             return;
-    //         }
+        if (!$card) {
+            $this->respondWithError(404, "Card not found");
+            return;
+        }
 
-    //         $this->respond($category);
-    //     }
+        $this->respond($card);
+    }
 
-    //     public function create()
-    //     {
-    //         try {
-    //             $category = $this->createObjectFromPostedJson("Models\\Category");
-    //             $this->service->insert($category);
+    //nog testen
+    public function add()
+    {
+        try {
+            $card = $this->createObjectFromPostedJson("Models\\Card");
+            $this->service->add($card);
 
-    //         } catch (Exception $e) {
-    //             $this->respondWithError(500, $e->getMessage());
-    //         }
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
 
-    //         $this->respond($category);
-    //     }
+        $this->respond($card);
+    }
 
     //     public function update($id)
     //     {

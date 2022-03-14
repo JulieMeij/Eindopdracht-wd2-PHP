@@ -13,6 +13,12 @@ class CardService
         return $repository->getAll();
     }
 
+    public function getOne($id)
+    {
+        $repository = new CardRepository();
+        return $repository->getOne($id);
+    }
+
     public function delete($id)
     {
         $repository = new CardRepository();

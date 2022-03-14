@@ -4,7 +4,6 @@ namespace Repositories;
 use PDO;
 use PDOException;
 use Repositories\Repository;
-use Models\User;
 
 class UserRepository extends Repository
 {
@@ -21,7 +20,7 @@ class UserRepository extends Repository
             $stmt = $this->connection->prepare("SELECT * FROM users $orderSql");
             $stmt->execute();
 
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
 
             $users = $stmt->fetchAll();
 
@@ -38,7 +37,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
 
             $users = $stmt->fetchAll();
 
@@ -54,7 +53,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
 
             $user = $stmt->fetch();
 
@@ -70,7 +69,7 @@ class UserRepository extends Repository
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
 
             $user = $stmt->fetch();
 
