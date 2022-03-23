@@ -48,28 +48,16 @@ class CardController extends Controller
         $this->respond($card);
     }
 
-    //     public function update($id)
-    //     {
-    //         try {
-    //             $category = $this->createObjectFromPostedJson("Models\\Category");
-    //             $this->service->update($category, $id);
+    //nog testen
+    public function delete($id)
+    {
+        try {
+            $this->service->delete($id);
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
 
-    //         } catch (Exception $e) {
-    //             $this->respondWithError(500, $e->getMessage());
-    //         }
-
-    //         $this->respond($category);
-    //     }
-
-    //     public function delete($id)
-    //     {
-    //         try {
-    //             $this->service->delete($id);
-    //         } catch (Exception $e) {
-    //             $this->respondWithError(500, $e->getMessage());
-    //         }
-
-    //         $this->respond(true);
-    //     }
-    // }
+        $this->respond(true);
+    }
 }
+
