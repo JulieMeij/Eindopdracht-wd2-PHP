@@ -27,7 +27,7 @@ $router->delete('/cards/(\d+)', 'CardController@delete');
 // $router->delete('/users/(\d+)', 'CategoryController@delete');
 
 // // routes for users endpoint
-// $router->post('/users/login', 'UserController@login');
+$router->post('/users/login', 'UserController@login');
 
 // Run it!
 $router->run();

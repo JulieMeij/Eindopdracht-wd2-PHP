@@ -6,6 +6,12 @@ use Repositories\UserRepository;
 use Models\User;
 
 class UserService{
+
+    function checkUsernamePassword($username, $password)
+    {
+        return $this->repository->checkUsernamePassword($username, $password);
+    }
+    
     public function getAll(){
         $repository = new UserRepository();
         return $repository->getAll("type");
