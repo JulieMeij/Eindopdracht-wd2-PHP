@@ -38,10 +38,18 @@ class UserController extends Controller
             );
             $jwt = JWT::encode($payload, $key, 'HS256');
 
-            $this->respond(["token" => $jwt]);
+            $this->respond(
+                ["token" => $jwt,
+                "username" => $user->username,
+                "type" => $user->type]
+            );
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
+    }
+
+    public function register()
+    {
     }
 
     public function getAll()

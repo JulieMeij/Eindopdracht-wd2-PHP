@@ -13,7 +13,7 @@ class UserRepository extends Repository
     {
         try {
             // retrieve the user with the given username
-            $stmt = $this->connection->prepare("SELECT id, username, password, email FROM user WHERE username = :username");
+            $stmt = $this->connection->prepare("SELECT id, username, password, points, type FROM users WHERE username = :username");
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
@@ -35,21 +35,17 @@ class UserRepository extends Repository
         }
     }
 
-    //to do
+
     // hash the password (currently uses bcrypt)
     function hashPassword($password)
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
-    //to do
     // verify the password hash
     function verifyPassword($input, $hash)
     {
-        //return password_verify($input, $hash);
-        //TIJDELIJK zonder hash
-        if ($input == $hash) return true;
-        return false;
+        return password_verify($input, $hash);
     }
 
     function getAll($orderBy, $offset = NULL, $limit = NULL)
@@ -120,12 +116,15 @@ class UserRepository extends Repository
     function insert($user)
     {
         try {
-            $stmt = $this->connection->prepare("INSERT INTO users(username, email, password, points, type) 
-            VALUES(:uname, :email, :password, :points, :type)");
+            $stmt = $this->connection->prepare("INSERT INTO users(username, password, points, type) 
+            VALUES(:uname, :password, :points, :type)");
 
             $stmt->bindParam(':uname', $user->username);
-            $stmt->bindParam(':email', $user->email);
-            $stmt->bindParam(':password', $user->password);
+
+            //hashes password before storing in database
+            $hashed_password = $this->hashPassword($user->password);
+            $stmt->bindParam(':password', $hashed_password);
+
             $stmt->bindParam(':points', $user->points);
             $stmt->bindParam(':type', $user->type);
 
@@ -141,9 +140,9 @@ class UserRepository extends Repository
     {
         try {
             $stmt = $this->connection->prepare("UPDATE users SET username = ?,
-            email = ?, password = ?, points = ?, type = ? WHERE id = ?");
+             password = ?, points = ?, type = ? WHERE id = ?");
 
-            $stmt->execute([$user->username, $user->email, $user->password, $user->points, $user->type, $id]);
+            $stmt->execute([$user->username, $user->password, $user->points, $user->type, $id]);
 
             return $this->getOneforId($id);
         } catch (PDOException $e) {

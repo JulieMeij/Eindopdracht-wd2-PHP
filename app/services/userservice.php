@@ -30,16 +30,15 @@ class UserService
         return $this->repository->getOne($id);
     }
 
-    public function register($uname, $email, $password)
+    public function register($postedUser)
     {
         //default values for all new users
         $default_points = 10;
         $default_type = "user";
 
         $user = new User();
-        $user->username = $uname;
-        $user->email = $email;
-        $user->password = $password;
+        $user->username = $postedUser->username;
+        $user->password = $postedUser->password;
         $user->points = $default_points;
         $user->type = $default_type;
 

@@ -28,11 +28,6 @@ $router->post('/users', 'UserController@create');
 $router->put('/users/(\d+)', 'UserController@update');
 $router->delete('/users/(\d+)', 'UserController@delete');
 
-// $router->get('/users/(\d+)', 'CategoryController@getOne');
-// $router->post('/users', 'CategoryController@create');
-// $router->put('/users/(\d+)', 'CategoryController@update');
-// $router->delete('/users/(\d+)', 'CategoryController@delete');
-
 // routes for score endpoints
 $router->get('/scores', 'ScoreController@getAll');
 
