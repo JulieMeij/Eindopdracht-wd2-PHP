@@ -20,14 +20,22 @@ $router->post('/cards', 'CardController@add');
 $router->delete('/cards/(\d+)', 'CardController@delete');
 
 // routes for the user endpoint
-// $router->get('/users', 'CategoryController@getAll');
+$router->post('/users/login', 'UserController@login');
+
+$router->get('/users', 'UserController@getAll');
+$router->get('/users/(\d+)', 'UserController@getOne');
+$router->post('/users', 'UserController@create');
+$router->put('/users/(\d+)', 'UserController@update');
+$router->delete('/users/(\d+)', 'UserController@delete');
+
 // $router->get('/users/(\d+)', 'CategoryController@getOne');
 // $router->post('/users', 'CategoryController@create');
 // $router->put('/users/(\d+)', 'CategoryController@update');
 // $router->delete('/users/(\d+)', 'CategoryController@delete');
 
-// // routes for users endpoint
-$router->post('/users/login', 'UserController@login');
+// routes for score endpoints
+$router->get('/scores', 'ScoreController@getAll');
+
 
 // Run it!
 $router->run();

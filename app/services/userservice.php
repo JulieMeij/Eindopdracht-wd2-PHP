@@ -5,63 +5,64 @@ namespace Services;
 use Repositories\UserRepository;
 use Models\User;
 
-class UserService{
+class UserService
+{
+
+    private $repository;
+
+    function __construct()
+    {
+        $this->repository = new UserRepository();
+    }
 
     function checkUsernamePassword($username, $password)
     {
         return $this->repository->checkUsernamePassword($username, $password);
     }
-    
-    public function getAll(){
-        $repository = new UserRepository();
-        return $repository->getAll("type");
+
+    public function getAll()
+    {
+        return $this->repository->getAll("type");
     }
 
-    public function getAllExceptOne($id){
-        $repository = new UserRepository();
-        return $repository->getAllExceptOne($id);
+    public function getOne($id)
+    {
+        return $this->repository->getOne($id);
     }
 
-    public function register($uname, $email, $password){
-        $repository = new UserRepository();
-        
+    public function register($uname, $email, $password)
+    {
         //default values for all new users
         $default_points = 10;
-        $default_type = "user";  
-        
+        $default_type = "user";
+
         $user = new User();
-        $user->setUsername($uname);
-        $user->setEmail($email);
-        $user->setPassword($password);
-        $user->setPoints($default_points);
-        $user->setType($default_type);
-        
-        $repository->insert($user);
+        $user->username = $uname;
+        $user->email = $email;
+        $user->password = $password;
+        $user->points = $default_points;
+        $user->type = $default_type;
+
+        $this->repository->insert($user);
     }
 
-    public function addUser($user){
-        $repository = new UserRepository();
-        return $repository->insert($user);
+    public function insert($user)
+    {
+        return $this->repository->insert($user);
     }
 
-    public function edit($user){
-        $repository = new UserRepository();
-        return $repository->edit($user);
+    public function update($user, $id)
+    {
+        return $this->repository->update($user, $id);
     }
 
-    public function getOneforId($id){
-        $repository = new UserRepository();
-        return $repository->getOneforId($id);
-    }
-
-    public function getOneforUsername($username){
-        $repository = new UserRepository();
-        return $repository->getOneforUsername($username);
+    public function getOneforId($id)
+    {
+        return $this->repository->getOneforId($id);
     }
 
     public function delete($id)
     {
-        $repository = new UserRepository();
-        return $repository->delete($id);
+        return $this->repository->delete($id);
     }
 }

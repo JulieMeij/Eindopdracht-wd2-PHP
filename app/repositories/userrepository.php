@@ -1,4 +1,5 @@
 <?php
+
 namespace Repositories;
 
 use PDO;
@@ -7,6 +8,7 @@ use Repositories\Repository;
 
 class UserRepository extends Repository
 {
+    //to do
     function checkUsernamePassword($username, $password)
     {
         try {
@@ -33,66 +35,58 @@ class UserRepository extends Repository
         }
     }
 
-    
+    //to do
     // hash the password (currently uses bcrypt)
     function hashPassword($password)
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
+    //to do
     // verify the password hash
     function verifyPassword($input, $hash)
     {
         //return password_verify($input, $hash);
         //TIJDELIJK zonder hash
-        if($input == $hash) return true;
+        if ($input == $hash) return true;
         return false;
     }
 
-    function getAll($orderBy)
+    function getAll($orderBy, $offset = NULL, $limit = NULL)
     {
-        if($orderBy == "points"){
+        if ($orderBy == "points") {
             $orderSql = "ORDER BY points DESC";
-        }else if($orderBy = "type"){
+        } else if ($orderBy = "type") {
             $orderSql = "ORDER BY type";
-        }else{
+        } else {
             $orderSql = "";
         }
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM users $orderSql");
+            $query = "SELECT * FROM users $orderSql";
+            if (isset($limit) && isset($offset)) {
+                $query .= " LIMIT :limit OFFSET :offset ";
+            }
+            $stmt = $this->connection->prepare($query);
+            if (isset($limit) && isset($offset)) {
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            }
             $stmt->execute();
 
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
-
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\User');
             $users = $stmt->fetchAll();
 
             return $users;
         } catch (PDOException $e) {
-            return $e;
+            echo $e;
         }
     }
 
-    function getAllExceptOne($id)
+    function getOne($id)
     {
         try {
-            $stmt = $this->connection->prepare("SELECT * FROM users Except SELECT * FROM users WHERE id = :id");
+            $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = :id");
             $stmt->bindParam(':id', $id);
-            $stmt->execute();
-
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
-
-            $users = $stmt->fetchAll();
-
-            return $users;
-        } catch (PDOException $e) {
-            return $e;
-        }
-    }
-
-    function getOneforUsername($username){
-        try {
-            $stmt = $this->connection->prepare("SELECT * FROM users WHERE username = :username");
-            $stmt->bindParam(':username', $username);
             $stmt->execute();
 
             $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
@@ -101,11 +95,13 @@ class UserRepository extends Repository
 
             return $user;
         } catch (PDOException $e) {
-            return $e;
+            echo $e;
         }
     }
 
-    function getOneforId($id){
+    //to do
+    function getOneforId($id)
+    {
         try {
             $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = :id");
             $stmt->bindParam(':id', $id);
@@ -127,64 +123,45 @@ class UserRepository extends Repository
             $stmt = $this->connection->prepare("INSERT INTO users(username, email, password, points, type) 
             VALUES(:uname, :email, :password, :points, :type)");
 
-            $uname = $user->getUsername();
-            $email = $user->getEmail();
-            $password = $user->getPassword();
-            $points = $user->getPoints();
-            $type = $user->getType();
-
-            $stmt->bindParam(':uname', $uname);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':password', $password);
-            $stmt->bindParam(':points', $points);
-            $stmt->bindParam(':type', $type);
+            $stmt->bindParam(':uname', $user->username);
+            $stmt->bindParam(':email', $user->email);
+            $stmt->bindParam(':password', $user->password);
+            $stmt->bindParam(':points', $user->points);
+            $stmt->bindParam(':type', $user->type);
 
             $stmt->execute();
+
+            return $user;
         } catch (PDOException $e) {
             echo $e;
         }
     }
 
-    function edit($user){
+    function update($user, $id)
+    {
         try {
-            $stmt = $this->connection->prepare("UPDATE users SET username = :username,
-            email = :email, password = :password, points = :points, type = :type WHERE id = :id");
+            $stmt = $this->connection->prepare("UPDATE users SET username = ?,
+            email = ?, password = ?, points = ?, type = ? WHERE id = ?");
 
-            $username = $user->getUsername();
-            $email = $user->getEmail();
-            $password = $user->getPassword();
-            $points = $user->getPoints();
-            $type = $user->getType();
-            $id = $user->getId();
+            $stmt->execute([$user->username, $user->email, $user->password, $user->points, $user->type, $id]);
 
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':password', $password);
-            $stmt->bindParam(':points', $points);
-            $stmt->bindParam(':type', $type);
-            $stmt->bindParam(':id', $id);
-
-            $stmt->execute();
-
-            return "success";
+            return $this->getOneforId($id);
         } catch (PDOException $e) {
-            return $e;
+            echo $e;
         }
     }
 
+    //to do
     function delete($id)
     {
         try {
             $stmt = $this->connection->prepare('DELETE FROM users WHERE id = :id');
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return "success";
+            return true;
         } catch (PDOException $e) {
-            return $e;
+            echo $e;
         }
-    }
-
-    function getScoreboard(){
-        
+        return false;
     }
 }
