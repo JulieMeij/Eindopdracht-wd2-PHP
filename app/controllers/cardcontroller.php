@@ -34,30 +34,5 @@ class CardController extends Controller
         $this->respond($card);
     }
 
-    //nog testen
-    public function add()
-    {
-        try {
-            $card = $this->createObjectFromPostedJson("Models\\Card");
-            $this->service->add($card);
-
-        } catch (Exception $e) {
-            $this->respondWithError(500, $e->getMessage());
-        }
-
-        $this->respond($card);
-    }
-
-    //nog testen
-    public function delete($id)
-    {
-        try {
-            $this->service->delete($id);
-        } catch (Exception $e) {
-            $this->respondWithError(500, $e->getMessage());
-        }
-
-        $this->respond(true);
-    }
 }
 

@@ -24,7 +24,7 @@ class UserController extends Controller
                 $this->respondWithError(401, "Invalid credentials");
                 return false;
             }
-            $key = "thismustbesecret";
+            $key = "mellon";
             $payload = array(
                 "iss" => "http://localhost",
                 "aud" => "http://localhost",
@@ -33,15 +33,15 @@ class UserController extends Controller
                 "exp" => time() + 600,
                 "data" => array(
                     "id" => $user->id,
-                    "username" => $user->username
+                    "username" => $user->username,
+                    "type" => $user->type
                 )
             );
             $jwt = JWT::encode($payload, $key, 'HS256');
 
             $this->respond(
                 ["token" => $jwt,
-                "username" => $user->username,
-                "type" => $user->type]
+                "username" => $user->username ]
             );
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -54,6 +54,9 @@ class UserController extends Controller
 
     public function getAll()
     {
+        $jwt = $this->checkAdmin();
+        if(!$jwt) return;
+
         try {
             $users = $this->service->getAll();
         } catch (Exception $e) {
@@ -75,6 +78,9 @@ class UserController extends Controller
 
     public function update($id)
     {
+        $jwt = $this->checkAdmin();
+        if(!$jwt) return;
+
         try {
             $user = $this->createObjectFromPostedJson("Models\\User");
             $user = $this->service->update($user, $id);
@@ -87,6 +93,9 @@ class UserController extends Controller
 
     public function create()
     {
+        $jwt = $this->checkToken();
+        if(!$jwt) return;
+
         try {
             $user = $this->createObjectFromPostedJson("Models\\User");
             $user = $this->service->insert($user);
@@ -99,6 +108,9 @@ class UserController extends Controller
 
     public function delete($id)
     {
+        $jwt = $this->checkToken();
+        if(!$jwt) return;
+
         try {
             $success = $this->service->delete($id);
         } catch (Exception $e) {

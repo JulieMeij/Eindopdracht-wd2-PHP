@@ -8,10 +8,19 @@ use Firebase\JWT\Key;
 
 class Controller
 {
+    function checkAdmin(){
+        $jwt = $this->checkToken();
+        if($jwt->data->type != 'admin') {
+            $this->respondWithError(401, 'You do not have the right authorization');
+            return false;
+        }
+        return $jwt;
+    }
+
     function checkToken(){
 
         if (!isset($_SERVER["HTTP_AUTHORIZATION"])) {
-            $this->respondWithError(401, "yOU ShaLL NoT PAsS");
+            $this->respondWithError(401, "You shall not pass.");
             return false;
         }
 
@@ -20,7 +29,7 @@ class Controller
             $array = explode(" ", $header);
             $jwt = $array[1];
 
-            $key = "thismustbesecret";
+            $key = "mellon";
 
             $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
 
