@@ -42,7 +42,13 @@ class UserService
         $user->points = $default_points;
         $user->type = $default_type;
 
-        $this->repository->insert($user);
+        return $this->repository->insert($user);
+    }
+
+    public function checkUsernameExists($username){
+        $user = $this->repository->getOneforUsername($username);
+        if($user->username == $username) return true;
+        return false;
     }
 
     public function insert($user)

@@ -50,6 +50,18 @@ class UserController extends Controller
 
     public function register()
     {
+        try{
+            $postedUser = $this->createObjectFromPostedJson("Models\\User");
+            if($this->service->checkUsernameExists($postedUser->username)){
+                $this->respondWithError(500, "username already exists");
+                return;
+            }
+            $user = $this->service->register($postedUser);
+        } catch(Exception $e){
+            $this->respondWithError(500, $e->getMessage());
+        }
+
+        $this->respond($user);
     }
 
     public function getAll()

@@ -95,6 +95,22 @@ class UserRepository extends Repository
         }
     }
 
+    function getOneforUsername($username){
+        try {
+            $stmt = $this->connection->prepare("SELECT * FROM users WHERE username = :username");
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
+
+            $user = $stmt->fetch();
+
+            return $user;
+        } catch (PDOException $e) {
+            echo $e;
+        }
+    }
+
     //to do
     function getOneforId($id)
     {
@@ -130,7 +146,7 @@ class UserRepository extends Repository
 
             $stmt->execute();
 
-            return $user;
+            return $this->getOneforId($this->connection->lastInsertId());
         } catch (PDOException $e) {
             echo $e;
         }
