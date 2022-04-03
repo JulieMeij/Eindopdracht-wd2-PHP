@@ -55,7 +55,7 @@ class CardService
         else $card->setColour("black");
 
         $repository = new CardRepository();
-        $repository->add($card);
+        $repository->insert($card);
     }
 
     public function addWholeDeck(){

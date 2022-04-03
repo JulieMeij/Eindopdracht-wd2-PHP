@@ -27,7 +27,7 @@ class UserService
 
     public function getOne($id)
     {
-        return $this->repository->getOne($id);
+        return $this->repository->getOneForId($id);
     }
 
     public function register($postedUser)
@@ -59,11 +59,6 @@ class UserService
     public function update($user, $id)
     {
         return $this->repository->update($user, $id);
-    }
-
-    public function getOneforId($id)
-    {
-        return $this->repository->getOneforId($id);
     }
 
     public function delete($id)

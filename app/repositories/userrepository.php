@@ -35,7 +35,6 @@ class UserRepository extends Repository
         }
     }
 
-
     // hash the password (currently uses bcrypt)
     function hashPassword($password)
     {
@@ -78,23 +77,6 @@ class UserRepository extends Repository
         }
     }
 
-    function getOne($id)
-    {
-        try {
-            $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = :id");
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Models\\User');
-
-            $user = $stmt->fetch();
-
-            return $user;
-        } catch (PDOException $e) {
-            echo $e;
-        }
-    }
-
     function getOneforUsername($username){
         try {
             $stmt = $this->connection->prepare("SELECT * FROM users WHERE username = :username");
@@ -111,7 +93,6 @@ class UserRepository extends Repository
         }
     }
 
-    //to do
     function getOneforId($id)
     {
         try {
@@ -156,9 +137,9 @@ class UserRepository extends Repository
     {
         try {
             $stmt = $this->connection->prepare("UPDATE users SET username = ?,
-             password = ?, points = ?, type = ? WHERE id = ?");
+             points = ?, type = ? WHERE id = ?");
 
-            $stmt->execute([$user->username, $user->password, $user->points, $user->type, $id]);
+            $stmt->execute([$user->username, $user->points, $user->type, $id]);
 
             return $this->getOneforId($id);
         } catch (PDOException $e) {
@@ -166,7 +147,6 @@ class UserRepository extends Repository
         }
     }
 
-    //to do
     function delete($id)
     {
         try {

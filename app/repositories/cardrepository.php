@@ -45,13 +45,14 @@ class CardRepository extends Repository
             $stmt = $this->connection->prepare('DELETE FROM cards WHERE id = :id');
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return "success";
+            return true;
         } catch (PDOException $e) {
             return $e;
         }
+        return false;
     }
 
-    function add($card)
+    function insert($card)
     {
         try {
             $stmt = $this->connection->prepare("INSERT INTO cards(number, name, colour, type, price) 
@@ -70,6 +71,8 @@ class CardRepository extends Repository
             $stmt->bindParam(':price', $price);
 
             $stmt->execute();
+
+            return $this->getOne($this->connection->lastInsertId());
         } catch (PDOException $e) {
             return $e;
         }
@@ -79,9 +82,11 @@ class CardRepository extends Repository
         try {
             $stmt = $this->connection->prepare('DELETE FROM cards');
             $stmt->execute();
+            return true;
         } catch (PDOException $e) {
             return $e;
         }
+        return false;
     }
 
 }
