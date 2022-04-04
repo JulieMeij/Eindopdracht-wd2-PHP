@@ -40,8 +40,10 @@ class UserController extends Controller
             $jwt = JWT::encode($payload, $key, 'HS256');
 
             $this->respond(
-                ["token" => $jwt,
-                "username" => $user->username ]
+                [
+                    "token" => $jwt,
+                    "username" => $user->username
+                ]
             );
         } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
@@ -50,14 +52,14 @@ class UserController extends Controller
 
     public function register()
     {
-        try{
+        try {
             $postedUser = $this->createObjectFromPostedJson("Models\\User");
-            if($this->service->checkUsernameExists($postedUser->username)){
+            if ($this->service->checkUsernameExists($postedUser->username)) {
                 $this->respondWithError(500, "username already exists");
                 return;
             }
             $user = $this->service->register($postedUser);
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $this->respondWithError(500, $e->getMessage());
         }
 
@@ -67,7 +69,10 @@ class UserController extends Controller
     public function getAll()
     {
         $jwt = $this->checkAdmin();
-        if(!$jwt) return;
+        if (!$jwt) {
+            $this->respondWithError(401, 'You do not have the right authorization');
+            return;
+        }
 
         try {
             $users = $this->service->getAll();
@@ -91,7 +96,7 @@ class UserController extends Controller
     public function update($id)
     {
         $jwt = $this->checkAdmin();
-        if(!$jwt) return;
+        if (!$jwt) return;
 
         try {
             $user = $this->createObjectFromPostedJson("Models\\User");
@@ -106,7 +111,7 @@ class UserController extends Controller
     public function create()
     {
         $jwt = $this->checkToken();
-        if(!$jwt) return;
+        if (!$jwt) return;
 
         try {
             $user = $this->createObjectFromPostedJson("Models\\User");
@@ -121,7 +126,7 @@ class UserController extends Controller
     public function delete($id)
     {
         $jwt = $this->checkToken();
-        if(!$jwt) return;
+        if (!$jwt) return;
 
         try {
             $success = $this->service->delete($id);

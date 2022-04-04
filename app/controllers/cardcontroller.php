@@ -17,7 +17,11 @@ class CardController extends Controller
 
     public function getAll()
     {
-        $cards = $this->service->getAll();
+        try {
+            $cards = $this->service->getAll();
+        } catch (Exception $e) {
+            $this->respondWithError(500, $e->getMessage());
+        }
 
         $this->respond($cards);
     }
@@ -33,6 +37,4 @@ class CardController extends Controller
 
         $this->respond($card);
     }
-
 }
-
