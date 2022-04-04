@@ -42,7 +42,8 @@ class UserController extends Controller
             $this->respond(
                 [
                     "token" => $jwt,
-                    "username" => $user->username
+                    "usertype" => $user->type,
+                    "status" => 200
                 ]
             );
         } catch (Exception $e) {
